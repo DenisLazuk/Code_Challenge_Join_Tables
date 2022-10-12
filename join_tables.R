@@ -1,21 +1,25 @@
+# Challenge: Join two data frames and merge the data. Save the resulting data frame to Excel file.
+
 # import libraries
 library(dplyr)
 library(readxl)
 library(writexl)
 
 # import datasets from Excel
-table_1 <- read_excel("c:/Users/fox/Desktop/eefp/table 1.xlsx")
-table_2 <- read_excel("c:/Users/fox/Desktop/eefp/table 2.xlsx")
+table_1 <- read_excel("D:/MEGA/R/Projects/Code_Challenge_Join_Tables/table 1.xlsx")
+table_2 <- read_excel("D:/MEGA/R/Projects/Code_Challenge_Join_Tables/table 2.xlsx")
 
 # join tables replacing NA in table 1 using values from table 2
 table_final <- table_1 %>% 
-  left_join(table_2, by = "name") %>% 
-  mutate(cws = coalesce(cws.x, cws.y), pages = coalesce(pages.x, pages.y)) %>% 
-  select(-cws.x, -cws.y,-pages.x, -pages.y) %>% mutate(net_pages = round((cws/1800),2))
+  left_join(table_2, by = "name") %>% # join tables
+  mutate(cws = coalesce(cws.x, cws.y), pages = coalesce(pages.x, pages.y)) %>% # merge corresponding values
+  select(-cws.x, -cws.y,-pages.x, -pages.y) %>% mutate(net_pages = round((cws/1800),2)) # leave only resulting columns and add net pages column
 
 # save the resulting dataset in Excel
-write_xlsx(table_final,"c:/Users/fox/Desktop/eefp/table_final.xlsx")
+write_xlsx(table_final,"D:/MEGA/R/Projects/Code_Challenge_Join_Tables/table_final.xlsx")
 
-x1 <- data.frame(list.files("c:/Users/fox/Desktop/eefp", recursive = T, include.dirs = T))
-colnames(x1) <- c('name')
-write_xlsx(x1,"c:/Users/fox/Desktop/eefp/x1.xlsx")
+# Optional:
+# list all the directory names and its files
+raw_table <- data.frame(list.files("D:/MEGA/R/Projects/Code_Challenge_Join_Tables", recursive = T, include.dirs = T))
+colnames(raw_table) <- c('name')
+write_xlsx(x1,"c:/Users/fox/Desktop/eefp/raw_table.xlsx")
